@@ -1,0 +1,43 @@
+apply plugin: 'java'
+apply plugin: 'com.diffplug.gradle.spotless'
+
+group 'com.chatkitty'
+version '1.0-SNAPSHOT'
+
+buildscript {
+  ext {
+    spotlessPluginVersion = '3.25.0'
+  }
+
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath "com.diffplug.spotless:spotless-plugin-gradle:$spotlessPluginVersion"
+  }
+}
+
+apply from: 'dependencies.gradle'
+
+spotless {
+  java {
+    googleJavaFormat()
+
+    licenseHeaderFile './license_header.txt'
+
+    importOrder 'java', 'javax', 'org', 'com', 'com.chatkitty', ''
+
+    removeUnusedImports()
+  }
+}
+
+repositories {
+  jcenter()
+
+  maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+  def dependencies = rootProject.ext.sdkDependencies
+}
