@@ -12,11 +12,4 @@
 
 ### How would you reproduce this issue?
 
-**Account:**
-
-**Device:**
-
-**Build Number:** 
-### Screenshot of Application
-
 - [ ] **I HAVE VERIFIED THAT I HAVE FILLED IN THE ALL THE APPLICABLE FIELDS BEFORE CREATING GITHUB ISSUE**
