@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chatkitty;
+package com.chatkitty.model;
 
-/** ChatKitty facade */
-public interface ChatKitty {
-  static ChatKitty getInstance(String apiKey) {
-    return new ChatKittyImpl(apiKey);
+public class ChatKittyException {
+
+  public final String message;
+
+  public ChatKittyException(String message) {
+    this.message = message;
   }
 }
