@@ -20,4 +20,6 @@ public interface ChatKitty {
   static ChatKitty getInstance(String apiKey) {
     return new ChatKittyImpl(apiKey);
   }
+
+  void startSession(String username, ChatKittyCallback callback);
 }

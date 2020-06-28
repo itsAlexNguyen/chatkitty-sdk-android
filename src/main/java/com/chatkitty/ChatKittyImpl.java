@@ -21,4 +21,9 @@ public class ChatKittyImpl implements ChatKitty {
   public ChatKittyImpl(String apiKey) {
     this.apiKey = apiKey;
   }
+
+  @Override
+  public void startSession(String username, ChatKittyCallback callback) {
+    // TODO - Implementation
+  }
 }
