@@ -40,4 +40,8 @@ repositories {
 
 dependencies {
   def dependencies = rootProject.ext.sdkDependencies
+  implementation dependencies.jackson
+  implementation dependencies.okHttp
+  implementation dependencies.rxJava
+  implementation dependencies.stompx
 }

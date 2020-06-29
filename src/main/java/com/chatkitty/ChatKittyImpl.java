@@ -13,13 +13,84 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.chatkitty;
 
+import org.jetbrains.annotations.Nullable;
+
+import com.chatkitty.model.CurrentUser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.chatkitty.model.session.SessionStartResult;
+import com.chatkitty.stompx.stompx.StompWebSocketClient;
+import com.chatkitty.stompx.stompx.StompWebSocketClientCallBack;
+import com.chatkitty.stompx.stompx.WebSocketConfiguration;
+import com.chatkitty.stompx.stompx.stomp.StompSubscription;
+import com.chatkitty.stompx.stompx.stomp.WebSocketEvent;
+import com.chatkitty.stompx.stompx.stomp.stompframe.StompServerFrame;
+
+import okhttp3.OkHttpClient;
+
 public class ChatKittyImpl implements ChatKitty {
+
   private final String apiKey;
+  @Nullable private StompWebSocketClient client;
 
   public ChatKittyImpl(String apiKey) {
     this.apiKey = apiKey;
+  }
+
+  @Override
+  public void startSession(String username, ChatKittyCallback callback) {
+    WebSocketConfiguration configuration =
+        new WebSocketConfiguration(
+            apiKey, username, "https://staging-api.chatkitty.com", "/stompx");
+
+    client = new StompWebSocketClient(new OkHttpClient(), new ObjectMapper(), configuration);
+    client.start();
+
+    client.subscribeRelay(
+        "/application/users.me.relay",
+        new WebSocketClientCallBack<CurrentUser>(CurrentUser.class) {
+          @Override
+          void onParsedMessage(
+              CurrentUser resource,
+              StompWebSocketClient client,
+              StompSubscription subscription) {
+            SessionStartResult result = new SessionStartResult();
+            result.setCurrentUser(resource);
+            callback.onSuccess(result);
+          }
+        });
+  }
+
+  private abstract static class WebSocketClientCallBack<T> implements StompWebSocketClientCallBack {
+
+    private final ObjectMapper objectMapper =
+        new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    private final Class<T> type;
+
+    WebSocketClientCallBack(Class<T> type) {
+      this.type = type;
+    }
+
+    @Override
+    public void onNewMessage(
+        StompWebSocketClient client, StompServerFrame frame, StompSubscription subscription) {
+      try {
+        JavaType javaType =
+            objectMapper.getTypeFactory().constructParametricType(WebSocketEvent.class, type);
+        WebSocketEvent<T> response = objectMapper.readValue(frame.body, javaType);
+        onParsedMessage(response.getResource(), client, subscription);
+      } catch (JsonProcessingException e) {
+        e.printStackTrace();
+      }
+    }
+
+    abstract void onParsedMessage(
+        T resource, StompWebSocketClient client, StompSubscription subscription);
   }
 }

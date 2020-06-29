@@ -13,13 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chatkitty;
+package com.chatkitty.model.session;
 
-/** ChatKitty facade */
-public interface ChatKitty {
-  static ChatKitty getInstance(String apiKey) {
-    return new ChatKittyImpl(apiKey);
+import com.chatkitty.model.CurrentUser;
+
+public final class SessionStartResult {
+
+  private CurrentUser currentUser;
+
+  public CurrentUser getCurrentUser() {
+    return currentUser;
   }
 
-  void startSession(String username, ChatKittyCallback callback);
+  public void setCurrentUser(CurrentUser currentUser) {
+    this.currentUser = currentUser;
+  }
 }

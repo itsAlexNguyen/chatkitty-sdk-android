@@ -15,11 +15,14 @@
  */
 package com.chatkitty;
 
-/** ChatKitty facade */
-public interface ChatKitty {
-  static ChatKitty getInstance(String apiKey) {
-    return new ChatKittyImpl(apiKey);
-  }
+import com.chatkitty.model.ChatKittyException;
+import com.chatkitty.model.session.SessionStartResult;
 
-  void startSession(String username, ChatKittyCallback callback);
+public interface ChatKittyCallback {
+
+  void onSuccess(SessionStartResult result);
+
+  void onCancel();
+
+  void onError(ChatKittyException error);
 }
