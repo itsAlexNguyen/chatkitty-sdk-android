@@ -33,7 +33,7 @@ public class ChatKittyImpl implements ChatKitty {
   @Override
   public void startSession(String username, ChatKittyCallback callback) {
     WebSocketConfiguration configuration = new WebSocketConfiguration(apiKey,
-        username, "http://staging-api.chatkitty.com", "/stompx");
+        username, "https://staging-api.chatkitty.com", "/stompx");
 
     client = new StompWebSocketClient(new OkHttpClient(), new ObjectMapper(), configuration);
     // TODO - Subscribe to client, when object receive use the ChatKittyCallback.
