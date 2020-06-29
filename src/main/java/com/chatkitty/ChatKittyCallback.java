@@ -16,11 +16,10 @@
 package com.chatkitty;
 
 import com.chatkitty.model.ChatKittyException;
-import com.chatkitty.model.session.SessionStartResult;
 
-public interface ChatKittyCallback {
+public interface ChatKittyCallback<T> {
 
-  void onSuccess(SessionStartResult result);
+  void onSuccess(T result);
 
   void onCancel();
 

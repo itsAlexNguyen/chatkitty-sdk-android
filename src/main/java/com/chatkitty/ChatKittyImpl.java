@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.chatkitty.model.session.SessionStartResult;
+import com.chatkitty.model.session.response.SessionStartResult;
 import com.chatkitty.stompx.stompx.StompWebSocketClient;
 import com.chatkitty.stompx.stompx.StompWebSocketClientCallBack;
 import com.chatkitty.stompx.stompx.WebSocketConfiguration;
@@ -43,7 +43,7 @@ public class ChatKittyImpl implements ChatKitty {
   }
 
   @Override
-  public void startSession(String username, ChatKittyCallback callback) {
+  public void startSession(String username, ChatKittyCallback<SessionStartResult> callback) {
     WebSocketConfiguration configuration =
         new WebSocketConfiguration(
             apiKey, username, "https://staging-api.chatkitty.com", "/stompx");
@@ -52,7 +52,7 @@ public class ChatKittyImpl implements ChatKitty {
     client.start();
 
     client.subscribeRelay(
-        "/application/users.me.relay",
+        "/application/v1.users.me.relay",
         new WebSocketClientCallBack<CurrentUser>(CurrentUser.class) {
           @Override
           void onParsedMessage(
