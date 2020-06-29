@@ -17,6 +17,7 @@ package com.chatkitty;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.chatkitty.model.CurrentUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
@@ -52,13 +53,15 @@ public class ChatKittyImpl implements ChatKitty {
 
     client.subscribeRelay(
         "/application/users.me.relay",
-        new WebSocketClientCallBack<SessionStartResult>(SessionStartResult.class) {
+        new WebSocketClientCallBack<CurrentUser>(CurrentUser.class) {
           @Override
           void onParsedMessage(
-              SessionStartResult resource,
+              CurrentUser resource,
               StompWebSocketClient client,
               StompSubscription subscription) {
-            callback.onSuccess(resource);
+            SessionStartResult result = new SessionStartResult();
+            result.setCurrentUser(resource);
+            callback.onSuccess(result);
           }
         });
   }
