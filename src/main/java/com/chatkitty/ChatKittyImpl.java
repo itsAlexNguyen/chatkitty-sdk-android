@@ -18,7 +18,7 @@ package com.chatkitty;
 import com.chatkitty.stompx.stompx.StompWebSocketClient;
 import com.chatkitty.stompx.stompx.WebSocketConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 import okhttp3.OkHttpClient;
 
 public class ChatKittyImpl implements ChatKitty {
