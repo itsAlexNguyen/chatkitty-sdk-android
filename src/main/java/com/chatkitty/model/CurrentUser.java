@@ -17,9 +17,13 @@ package com.chatkitty.model;
 
 public class CurrentUser {
 
-  public final String name;
+  private String name;
 
-  public CurrentUser(String name) {
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
     this.name = name;
   }
 }

@@ -18,6 +18,7 @@ package com.chatkitty;
 import org.jetbrains.annotations.Nullable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -64,7 +65,9 @@ public class ChatKittyImpl implements ChatKitty {
 
   private abstract static class WebSocketClientCallBack<T> implements StompWebSocketClientCallBack {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper =
+        new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
     private final Class<T> type;
 
     WebSocketClientCallBack(Class<T> type) {
@@ -78,7 +81,7 @@ public class ChatKittyImpl implements ChatKitty {
         JavaType javaType =
             objectMapper.getTypeFactory().constructParametricType(WebSocketEvent.class, type);
         WebSocketEvent<T> response = objectMapper.readValue(frame.body, javaType);
-        onParsedMessage(response.resource, client, subscription);
+        onParsedMessage(response.getResource(), client, subscription);
       } catch (JsonProcessingException e) {
         e.printStackTrace();
       }

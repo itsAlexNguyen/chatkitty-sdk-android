@@ -2,7 +2,7 @@ ext {
   jacksonVersion = '2.11.1'
   okHttpVersion = '4.5.0'
   rxJavaVersion = '3.0.4'
-  stompxVersion = 'ef6edca639'
+  stompxVersion = '1b002a2233'
 
   sdkDependencies = [
       jackson : "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",

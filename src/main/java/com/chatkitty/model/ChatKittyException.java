@@ -17,9 +17,17 @@ package com.chatkitty.model;
 
 public class ChatKittyException {
 
-  public final String message;
+  private String message;
 
   public ChatKittyException(String message) {
+    this.message = message;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
     this.message = message;
   }
 }

@@ -19,9 +19,13 @@ import com.chatkitty.model.CurrentUser;
 
 public final class SessionStartResult {
 
-  public final CurrentUser currentUser;
+  private CurrentUser currentUser;
 
-  public SessionStartResult(CurrentUser currentUser) {
+  public CurrentUser getCurrentUser() {
+    return currentUser;
+  }
+
+  public void setCurrentUser(CurrentUser currentUser) {
     this.currentUser = currentUser;
   }
 }
