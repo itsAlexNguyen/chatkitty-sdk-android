@@ -15,8 +15,16 @@
  */
 package com.chatkitty;
 
+import com.chatkitty.stompx.stompx.StompWebSocketClient;
+import com.chatkitty.stompx.stompx.WebSocketConfiguration;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.istack.internal.Nullable;
+import okhttp3.OkHttpClient;
+
 public class ChatKittyImpl implements ChatKitty {
   private final String apiKey;
+  @Nullable
+  private StompWebSocketClient client;
 
   public ChatKittyImpl(String apiKey) {
     this.apiKey = apiKey;
@@ -24,6 +32,11 @@ public class ChatKittyImpl implements ChatKitty {
 
   @Override
   public void startSession(String username, ChatKittyCallback callback) {
-    // TODO - Implementation
+    WebSocketConfiguration configuration = new WebSocketConfiguration(apiKey,
+        username, "http://staging-api.chatkitty.com", "/stompx");
+
+    client = new StompWebSocketClient(new OkHttpClient(), new ObjectMapper(), configuration);
+    // TODO - Subscribe to client, when object receive use the ChatKittyCallback.
+    client.start();
   }
 }
