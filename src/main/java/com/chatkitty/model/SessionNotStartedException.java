@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chatkitty;
+package com.chatkitty.model;
 
-import com.chatkitty.model.ChatKittyException;
+public class SessionNotStartedException extends ChatKittyException {
 
-public interface ChatKittyCallback<T> {
-
-  void onSuccess(T result);
-
-  void onCancel();
-
-  void onError(ChatKittyException error);
+  public SessionNotStartedException() {
+    super("ChatKitty session has not started.");
+  }
 }

@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chatkitty;
+package com.chatkitty.model.session.response;
 
-import com.chatkitty.model.ChatKittyException;
+import com.chatkitty.model.CurrentUser;
 
-public interface ChatKittyCallback<T> {
+public final class SessionStartResult {
 
-  void onSuccess(T result);
+  private CurrentUser currentUser;
 
-  void onCancel();
+  public CurrentUser getCurrentUser() {
+    return currentUser;
+  }
 
-  void onError(ChatKittyException error);
+  public void setCurrentUser(CurrentUser currentUser) {
+    this.currentUser = currentUser;
+  }
 }

@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chatkitty.model.session;
+package com.chatkitty.model.session.user;
 
 import com.chatkitty.model.CurrentUser;
 
-public final class SessionStartResult {
-
+public class GetCurrentUserResult {
   private CurrentUser currentUser;
 
   public CurrentUser getCurrentUser() {

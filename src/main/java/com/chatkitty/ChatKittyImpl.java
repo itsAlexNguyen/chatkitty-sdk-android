@@ -17,13 +17,15 @@ package com.chatkitty;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.chatkitty.model.CurrentUser;
+import com.chatkitty.model.SessionNotStartedException;
+import com.chatkitty.model.session.user.GetCurrentUserResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.chatkitty.model.session.SessionStartResult;
+import com.chatkitty.model.CurrentUser;
+import com.chatkitty.model.session.response.SessionStartResult;
 import com.chatkitty.stompx.stompx.StompWebSocketClient;
 import com.chatkitty.stompx.stompx.StompWebSocketClientCallBack;
 import com.chatkitty.stompx.stompx.WebSocketConfiguration;
@@ -38,12 +40,14 @@ public class ChatKittyImpl implements ChatKitty {
   private final String apiKey;
   @Nullable private StompWebSocketClient client;
 
+  @Nullable private SessionStartResult session;
+
   public ChatKittyImpl(String apiKey) {
     this.apiKey = apiKey;
   }
 
   @Override
-  public void startSession(String username, ChatKittyCallback callback) {
+  public void startSession(String username, ChatKittyCallback<SessionStartResult> callback) {
     WebSocketConfiguration configuration =
         new WebSocketConfiguration(
             apiKey, username, "https://staging-api.chatkitty.com", "/stompx");
@@ -56,10 +60,29 @@ public class ChatKittyImpl implements ChatKitty {
         new WebSocketClientCallBack<CurrentUser>(CurrentUser.class) {
           @Override
           void onParsedMessage(
-              CurrentUser resource,
-              StompWebSocketClient client,
-              StompSubscription subscription) {
+              CurrentUser resource, StompWebSocketClient client, StompSubscription subscription) {
             SessionStartResult result = new SessionStartResult();
+            result.setCurrentUser(resource);
+            session = result;
+            callback.onSuccess(result);
+          }
+        });
+  }
+
+  @Override
+  public void getCurrentUser(
+      ChatKittyCallback<GetCurrentUserResult> callback) {
+    if (client == null || session == null) {
+      // TODO - Should add more potential scenarios here.
+      callback.onError(new SessionNotStartedException());
+      return;
+    }
+    client.subscribeRelay(session.getCurrentUser().get_relays().getSelf(),
+        new WebSocketClientCallBack<CurrentUser>(CurrentUser.class) {
+          @Override
+          void onParsedMessage(CurrentUser resource, StompWebSocketClient client,
+              StompSubscription subscription) {
+            GetCurrentUserResult result = new GetCurrentUserResult();
             result.setCurrentUser(resource);
             callback.onSuccess(result);
           }

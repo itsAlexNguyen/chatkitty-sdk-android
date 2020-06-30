@@ -15,11 +15,17 @@
  */
 package com.chatkitty;
 
+import com.chatkitty.model.session.response.SessionStartResult;
+import com.chatkitty.model.session.user.GetCurrentUserResult;
+
 /** ChatKitty facade */
 public interface ChatKitty {
+
   static ChatKitty getInstance(String apiKey) {
     return new ChatKittyImpl(apiKey);
   }
 
-  void startSession(String username, ChatKittyCallback callback);
+  void startSession(String username, ChatKittyCallback<SessionStartResult> callback);
+
+  void getCurrentUser(ChatKittyCallback<GetCurrentUserResult> callback);
 }
