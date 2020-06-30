@@ -19,11 +19,44 @@ public class CurrentUser {
 
   private String name;
 
+  private Relays _relays;
+
   public String getName() {
     return name;
   }
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Relays get_relays() {
+    return _relays;
+  }
+
+  public void set_relays(Relays _relays) {
+    this._relays = _relays;
+  }
+
+  public static class Relays {
+
+    private String self;
+
+    private String channels;
+
+    public String getSelf() {
+      return self;
+    }
+
+    public void setSelf(String self) {
+      this.self = self;
+    }
+
+    public String getChannels() {
+      return channels;
+    }
+
+    public void setChannels(String channels) {
+      this.channels = channels;
+    }
   }
 }

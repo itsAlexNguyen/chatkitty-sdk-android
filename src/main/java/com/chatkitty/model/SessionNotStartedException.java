@@ -13,19 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chatkitty;
+package com.chatkitty.model;
 
-import com.chatkitty.model.session.response.SessionStartResult;
-import com.chatkitty.model.session.user.GetCurrentUserResult;
+public class SessionNotStartedException extends ChatKittyException {
 
-/** ChatKitty facade */
-public interface ChatKitty {
-
-  static ChatKitty getInstance(String apiKey) {
-    return new ChatKittyImpl(apiKey);
+  public SessionNotStartedException() {
+    super("ChatKitty session has not started.");
   }
-
-  void startSession(String username, ChatKittyCallback<SessionStartResult> callback);
-
-  void getCurrentUser(ChatKittyCallback<GetCurrentUserResult> callback);
 }
