@@ -13,22 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chatkitty;
+package com.chatkitty.pagination;
 
-import com.chatkitty.model.channel.response.GetChannelsResult;
-import com.chatkitty.model.session.response.SessionStartResult;
-import com.chatkitty.model.user.response.GetCurrentUserResult;
+import java.util.Iterator;
 
-/** ChatKitty facade */
-public interface ChatKitty {
-
-  static ChatKitty getInstance(String apiKey) {
-    return new ChatKittyImpl(apiKey);
-  }
-
-  void startSession(String username, ChatKittyCallback<SessionStartResult> callback);
-
-  void getCurrentUser(ChatKittyCallback<GetCurrentUserResult> callback);
-
-  void getChannels(ChatKittyCallback<GetChannelsResult> callback);
+public abstract class PageIterator<Model> implements Iterator<Model> {
+  // TODO - add additional generic implementation
 }

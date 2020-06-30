@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chatkitty;
+package com.chatkitty.model;
 
-import com.chatkitty.model.channel.response.GetChannelsResult;
-import com.chatkitty.model.session.response.SessionStartResult;
-import com.chatkitty.model.user.response.GetCurrentUserResult;
+public class Channel {
 
-/** ChatKitty facade */
-public interface ChatKitty {
+  private long id;
 
-  static ChatKitty getInstance(String apiKey) {
-    return new ChatKittyImpl(apiKey);
+  private String name;
+
+  public long getId() {
+    return id;
   }
 
-  void startSession(String username, ChatKittyCallback<SessionStartResult> callback);
+  public void setId(long id) {
+    this.id = id;
+  }
 
-  void getCurrentUser(ChatKittyCallback<GetCurrentUserResult> callback);
+  public String getName() {
+    return name;
+  }
 
-  void getChannels(ChatKittyCallback<GetChannelsResult> callback);
+  public void setName(String name) {
+    this.name = name;
+  }
 }
