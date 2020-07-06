@@ -16,7 +16,6 @@
 package com.chatkitty;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
@@ -67,13 +66,13 @@ public class ChatKittyImpl implements ChatKitty {
   public void startSession(String username, ChatKittyCallback<SessionStartResult> callback) {
     WebSocketConfiguration configuration =
         new WebSocketConfiguration(
-            apiKey, username, "https://staging-api.chatkitty.com", "/stompx");
+            apiKey, username, "https://staging-api.chatkitty.com", "/stompx/websocket");
 
     client = new StompWebSocketClient(new OkHttpClient(), new ObjectMapper(), configuration);
     client.start();
 
     client.subscribeRelay(
-        "/application/users.me.relay",
+        "/application/v1.users.me.relay",
         new WebSocketClientCallBack<CurrentUser>(CurrentUser.class) {
           @Override
           void onParsedMessage(
@@ -204,7 +203,7 @@ public class ChatKittyImpl implements ChatKitty {
             client.unsubscribe(subscription);
           }
         });
-    
+
     // TODO - We should move object mapping to outside the StompX library.
     try {
       client.sendPayload(channel.get_destinations().getMessage(), request, false);

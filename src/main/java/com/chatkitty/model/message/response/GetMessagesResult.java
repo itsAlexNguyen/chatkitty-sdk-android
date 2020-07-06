@@ -34,6 +34,11 @@ public final class GetMessagesResult {
     this.nextDestination = nextDestination;
   }
 
+  @Nullable
+  public String getNextDestination() {
+    return nextDestination;
+  }
+
   public PageIterator<Message> iterator() {
     return new PageIterator<Message>() {
       @Override

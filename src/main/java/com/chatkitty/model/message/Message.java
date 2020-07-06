@@ -20,6 +20,8 @@ public abstract class Message {
 
   private String type;
 
+  private Relays _relays;
+
   public int getId() {
     return id;
   }
@@ -34,5 +36,35 @@ public abstract class Message {
 
   public void setType(String type) {
     this.type = type;
+  }
+
+  public Relays get_relays() {
+    return _relays;
+  }
+
+  public void set_relays(Relays _relays) {
+    this._relays = _relays;
+  }
+
+  public static class Relays {
+    private String self;
+
+    private String user;
+
+    public String getSelf() {
+      return self;
+    }
+
+    public void setSelf(String self) {
+      this.self = self;
+    }
+
+    public String getUser() {
+      return user;
+    }
+
+    public void setUser(String user) {
+      this.user = user;
+    }
   }
 }
