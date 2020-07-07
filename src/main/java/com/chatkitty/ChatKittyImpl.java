@@ -16,7 +16,9 @@
 package com.chatkitty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -64,9 +66,13 @@ public class ChatKittyImpl implements ChatKitty {
 
   @Override
   public void startSession(String username, ChatKittyCallback<SessionStartResult> callback) {
+    Map<String, String> connectionHeaders = new HashMap<>();
+    connectionHeaders.put("Api-Key", apiKey);
+    connectionHeaders.put("StompX-User", username);
+
     WebSocketConfiguration configuration =
-        new WebSocketConfiguration(
-            apiKey, username, "https://staging-api.chatkitty.com", "/stompx/websocket");
+        new WebSocketConfiguration("https://staging-api.chatkitty.com",
+            "/stompx/websocket", connectionHeaders);
 
     client = new StompWebSocketClient(new OkHttpClient(), new ObjectMapper(), configuration);
     client.start();
