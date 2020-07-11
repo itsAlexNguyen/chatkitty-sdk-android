@@ -78,7 +78,7 @@ public class ChatKittyImpl implements ChatKitty {
     client.start();
 
     client.subscribeRelay(
-        "/application/v1.users.me.relay",
+        "/application/v1/users/me.relay",
         new WebSocketClientCallBack<CurrentUser>(CurrentUser.class) {
           @Override
           void onParsedMessage(
