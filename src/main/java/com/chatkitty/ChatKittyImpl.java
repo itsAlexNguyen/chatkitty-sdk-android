@@ -65,14 +65,17 @@ public class ChatKittyImpl implements ChatKitty {
   }
 
   @Override
-  public void startSession(String username, ChatKittyCallback<SessionStartResult> callback) {
+  public void startSession(
+      String username, String challengeToken, ChatKittyCallback<SessionStartResult> callback) {
     Map<String, String> connectionHeaders = new HashMap<>();
     connectionHeaders.put("Api-Key", apiKey);
     connectionHeaders.put("StompX-User", username);
-
+    if (challengeToken != null) {
+      connectionHeaders.put("StompX-Challenge-Token", challengeToken);
+    }
     WebSocketConfiguration configuration =
-        new WebSocketConfiguration("https://staging-api.chatkitty.com",
-            "/stompx/websocket", connectionHeaders);
+        new WebSocketConfiguration(
+            "https://staging-api.chatkitty.com", "/stompx/websocket", connectionHeaders);
 
     client = new StompWebSocketClient(new OkHttpClient(), new ObjectMapper(), configuration);
     client.start();
@@ -89,6 +92,11 @@ public class ChatKittyImpl implements ChatKitty {
             callback.onSuccess(result);
           }
         });
+  }
+
+  @Override
+  public void startSession(String username, ChatKittyCallback<SessionStartResult> callback) {
+    startSession(username, null, callback);
   }
 
   @Override

@@ -32,6 +32,9 @@ public interface ChatKitty {
     return new ChatKittyImpl(apiKey);
   }
 
+  void startSession(
+      String username, String challengeToken, ChatKittyCallback<SessionStartResult> callback);
+
   void startSession(String username, ChatKittyCallback<SessionStartResult> callback);
 
   void getCurrentUser(ChatKittyCallback<GetCurrentUserResult> callback);
