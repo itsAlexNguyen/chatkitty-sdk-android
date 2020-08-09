@@ -22,6 +22,9 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.chatkitty.configuration.ChatKittyConfiguration;
+import com.chatkitty.listeners.channel.ChannelEnterRegistration;
+import com.chatkitty.model.channel.response.EnterChannelResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
@@ -55,27 +58,33 @@ import okhttp3.OkHttpClient;
 
 public class ChatKittyImpl implements ChatKitty {
 
-  private final String apiKey;
+  private final ChatKittyConfiguration configuration;
+
   @Nullable private StompWebSocketClient client;
 
   @Nullable private SessionStartResult session;
 
   public ChatKittyImpl(String apiKey) {
-    this.apiKey = apiKey;
+    this.configuration = new ChatKittyConfiguration(apiKey);
+  }
+
+  public ChatKittyImpl(ChatKittyConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   @Override
   public void startSession(
       String username, String challengeToken, ChatKittyCallback<SessionStartResult> callback) {
     Map<String, String> connectionHeaders = new HashMap<>();
-    connectionHeaders.put("Api-Key", apiKey);
+    connectionHeaders.put("Api-Key", configuration.getApiKey());
     connectionHeaders.put("StompX-User", username);
     if (challengeToken != null) {
       connectionHeaders.put("StompX-Challenge-Token", challengeToken);
     }
     WebSocketConfiguration configuration =
         new WebSocketConfiguration(
-            "https://staging-api.chatkitty.com", "/stompx/websocket", connectionHeaders);
+            this.configuration.getWebSocketBaseUrl(), this.configuration.getWebSocketEndpoint(),
+            connectionHeaders);
 
     client = new StompWebSocketClient(new OkHttpClient(), new ObjectMapper(), configuration);
     client.start();
@@ -141,6 +150,19 @@ public class ChatKittyImpl implements ChatKitty {
             callback.onSuccess(result);
           }
         });
+  }
+
+  @Override
+  public ChannelEnterRegistration enterChannel(
+      Channel channel,
+      ChatKittyCallback<EnterChannelResult> callback) {
+    StompSubscription subscription =
+        client.subscribe(
+            channel.get_topics().getSelf(), (client, frame, subscription1) -> {
+              EnterChannelResult result = new EnterChannelResult();
+              callback.onSuccess(result);
+            });
+    return ChannelEnterRegistration.create(() -> client.unsubscribe(subscription));
   }
 
   @Override
@@ -220,7 +242,7 @@ public class ChatKittyImpl implements ChatKitty {
 
     // TODO - We should move object mapping to outside the StompX library.
     try {
-      client.sendPayload(channel.get_destinations().getMessage(), request, false);
+      client.sendPayload(channel.get_actions().getMessage(), request, false);
     } catch (JsonProcessingException exception) {
       exception.printStackTrace();
     }

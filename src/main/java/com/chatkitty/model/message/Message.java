@@ -15,10 +15,16 @@
  */
 package com.chatkitty.model.message;
 
+import com.chatkitty.model.user.response.UserProperties;
+import org.jetbrains.annotations.Nullable;
+
 public abstract class Message {
   private int id;
 
   private String type;
+
+  @Nullable
+  private UserProperties user;
 
   private Relays _relays;
 
@@ -44,6 +50,15 @@ public abstract class Message {
 
   public void set_relays(Relays _relays) {
     this._relays = _relays;
+  }
+
+  @Nullable
+  public UserProperties getUser() {
+    return user;
+  }
+
+  public void setUser(@Nullable UserProperties user) {
+    this.user = user;
   }
 
   public static class Relays {

@@ -15,9 +15,11 @@
  */
 package com.chatkitty;
 
+import com.chatkitty.listeners.channel.ChannelEnterRegistration;
 import com.chatkitty.listeners.channel.ChannelEventListener;
 import com.chatkitty.listeners.channel.ChannelEventListenerRegistration;
 import com.chatkitty.model.Channel;
+import com.chatkitty.model.channel.response.EnterChannelResult;
 import com.chatkitty.model.channel.response.GetChannelsResult;
 import com.chatkitty.model.message.request.CreateTextMessageRequest;
 import com.chatkitty.model.message.response.CreateMessageResult;
@@ -40,6 +42,8 @@ public interface ChatKitty {
   void getCurrentUser(ChatKittyCallback<GetCurrentUserResult> callback);
 
   void getChannels(ChatKittyCallback<GetChannelsResult> callback);
+
+  ChannelEnterRegistration enterChannel(Channel channel, ChatKittyCallback<EnterChannelResult> callback);
 
   void getChannelMessages(Channel channel, ChatKittyCallback<GetMessagesResult> callback);
 

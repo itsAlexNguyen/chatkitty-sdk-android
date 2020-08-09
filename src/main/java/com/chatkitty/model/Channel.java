@@ -27,7 +27,7 @@ public class Channel {
 
   private Topics _topics;
 
-  private Destinations _destinations;
+  private Actions _actions;
 
   public long getId() {
     return id;
@@ -69,15 +69,16 @@ public class Channel {
     this._topics = _topics;
   }
 
-  public Destinations get_destinations() {
-    return _destinations;
+  public Actions get_actions() {
+    return _actions;
   }
 
-  public void set_destinations(Destinations _destinations) {
-    this._destinations = _destinations;
+  public void set_actions(Actions _actions) {
+    this._actions = _actions;
   }
 
   public static class Topics {
+    private String self;
 
     private String messages;
 
@@ -88,9 +89,17 @@ public class Channel {
     public void setMessages(String messages) {
       this.messages = messages;
     }
+
+    public String getSelf() {
+      return self;
+    }
+
+    public void setSelf(String self) {
+      this.self = self;
+    }
   }
 
-  public static class Destinations {
+  public static class Actions {
 
     private String message;
 

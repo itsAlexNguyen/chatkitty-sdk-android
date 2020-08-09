@@ -17,6 +17,8 @@ package com.chatkitty.model.message.request;
 
 public final class CreateTextMessageRequest {
 
+  private String type = "TEXT";
+
   private String body;
 
   public CreateTextMessageRequest(String body) {
@@ -29,5 +31,13 @@ public final class CreateTextMessageRequest {
 
   public void setBody(String body) {
     this.body = body;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 }
